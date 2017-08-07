@@ -1,3 +1,19 @@
+module Meth : sig
+  type t =
+    [ `GET
+    | `POST
+    | `HEAD
+    | `PUT
+    | `DELETE
+    | `OPTIONS
+    | `TRACE
+    | `CONNECT
+    | `PATCH
+    | `Other of string ]
+
+  val pp : Format.formatter -> t -> unit
+end
+
 module Header : sig
   type t = (string * string) list
 
@@ -16,7 +32,7 @@ end
 
 module Request : sig
   type t =
-    { meth: string
+    { meth: Meth.t
     ; url: string
     ; headers: Header.t
     ; body: string
@@ -26,7 +42,7 @@ module Request : sig
     : ?headers:Header.t
     -> ?body:string
     -> url:string
-    -> meth:string
+    -> meth:Meth.t
     -> unit
     -> t
 

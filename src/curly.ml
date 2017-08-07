@@ -10,6 +10,34 @@ end
 
 open Result
 
+module Meth = struct
+  type t =
+    [ `GET
+    | `POST
+    | `HEAD
+    | `PUT
+    | `DELETE
+    | `OPTIONS
+    | `TRACE
+    | `CONNECT
+    | `PATCH
+    | `Other of string ]
+
+  let to_string = function
+    | `GET -> "GET"
+    | `POST -> "POST"
+    | `HEAD -> "HEAD"
+    | `PUT -> "PUT"
+    | `DELETE -> "DELETE"
+    | `OPTIONS -> "OPTIONS"
+    | `TRACE -> "TRACE"
+    | `CONNECT -> "CONNECT"
+    | `PATCH -> "PATCH"
+    | `Other s -> s
+
+  let pp fmt t = Format.fprintf fmt "%s" (to_string t)
+end
+
 module Header = struct
   type t = (string * string) list
 
@@ -85,7 +113,7 @@ end
 
 module Request = struct
   type t =
-    { meth: string
+    { meth: Meth.t
     ; url: string
     ; headers: Header.t
     ; body: string
@@ -100,14 +128,14 @@ module Request = struct
   let has_body t = String.length t.body > 0
 
   let validate t =
-    if has_body t && List.mem t.meth ["GET"; "HEAD"] then
+    if has_body t && List.mem t.meth [`GET; `HEAD] then
       Error (Error.Invalid_request "No body is allowed with GET/HEAD methods")
     else
       Ok t
 
   let to_cmd_args t =
     List.concat
-      [ ["-X"; t.meth]
+      [ ["-X"; Meth.to_string t.meth]
       ; Header.to_cmd t.headers
       ; [t.url]
       ; (if has_body t then
@@ -117,8 +145,8 @@ module Request = struct
       ]
 
   let pp fmt t =
-    Format.fprintf fmt "{ meth=%s;@ url=\"%s\";@ headers=\"%a\";@ body=\"%s\"}"
-      t.meth t.url Header.pp t.headers t.body
+    Format.fprintf fmt "{ meth=%a;@ url=\"%s\";@ headers=\"%a\";@ body=\"%s\"}"
+      Meth.pp t.meth t.url Header.pp t.headers t.body
 end
 
 let result_of_process_result t =

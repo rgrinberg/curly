@@ -47,7 +47,7 @@ open Curly
 
 let base =
   { Request.
-    meth = "GET"
+    meth = `GET
   ; headers = []
   ; url = Printf.sprintf "http://0.0.0.0:%d" port
   ; body = ""
@@ -95,7 +95,7 @@ let write_body _ =
         ; body
         ; headers = body_header body
         })
-    (Curly.run { (with_path "write_body") with Request.body ; meth = "POST" } )
+    (Curly.run { (with_path "write_body") with Request.body ; meth = `POST } )
 
 let () =
   let stopper = test_server () in
