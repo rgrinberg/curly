@@ -91,13 +91,13 @@ module Request = struct
     ; body: string
     }
 
-  let make ?(headers=Header.empty) ?(body="") ~url ~meth =
+  let make ?(headers=Header.empty) ?(body="") ~url ~meth () =
     { meth
     ; url
     ; headers
     ; body }
 
-  let has_body t = String.length t.body > 0 
+  let has_body t = String.length t.body > 0
 
   let validate t =
     if has_body t && List.mem t.meth ["GET"; "HEAD"] then

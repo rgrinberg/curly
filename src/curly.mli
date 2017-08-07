@@ -22,7 +22,13 @@ module Request : sig
     ; body: string
     }
 
-  val make : ?headers:Header.t -> ?body:string -> url:string -> meth:string -> t
+  val make
+    : ?headers:Header.t
+    -> ?body:string
+    -> url:string
+    -> meth:string
+    -> unit
+    -> t
 
   val to_cmd_args : t -> string list
 
