@@ -132,8 +132,9 @@ let run prog args stdin_str =
       prog :: (List.map Filename.quote args)
       |> String.concat " " in
     Unix.open_process_full prog [||] in
-  Printf.eprintf "writing body of length %d\n%!" (String.length stdin_str);
-  output_string stdin stdin_str;
+  if String.length stdin_str > 0 then (
+    output_string stdin stdin_str
+  );
   begin
     try close_out stdin;
     with _ -> ()
