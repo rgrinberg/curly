@@ -16,7 +16,8 @@ build-test: [["jbuilder" "runtest" "-p" name "-j" jobs]]
 
 depends: [
   "jbuilder" {build & >= "1.0+beta9"}
-  "cohttp-lwt-unix" {test}
+  "base-unix"
   "result"
+  "cohttp-lwt-unix" {test}
 ]
 available: [ocaml-version >= "4.02.3"]

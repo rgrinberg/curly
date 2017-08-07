@@ -5,4 +5,4 @@
 (library
  ((name curly)
   (public_name curly)
-  (libraries (result))))
+  (libraries (unix result))))
