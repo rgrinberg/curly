@@ -3,10 +3,8 @@ Curly - The Dumbest Http Client
 
 Curly is a brain dead wrapper around the curl command line utility designed to
 provide a 0 dependency solution for applications that want to create some very
-simple HTTP requests and want to avoid dependencies.
-
-It doesn't have any dependencies, C bindings, and the API can be learned in 5
-minutes.
+simple HTTP requests. It is not blazing fast, or async, but at least it involves
+no C bindings, it's trivial to vendor, and the API can be learned in 5 minutes.
 
 Here's a simple example:
 
