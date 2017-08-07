@@ -152,21 +152,24 @@ let run prog args stdin_str =
     | [] -> ()
     | read_list ->
       let can_read, _, _ = Unix.select read_list [] [] 1.0 in
-      List.fold_left (fun to_remove fh ->
-          let (rr, buf) =
-            if fh = stderr_fd then (
-              (input stderr, err_buf)
-            ) else (
-              (input stdout, in_buf)
-            ) in
-          begin match rr with
-            | Ok len ->
-              Buffer.add_subbytes buf read_buf 0 len;
-              fh :: to_remove
-            | Error `Eof ->
-              to_remove
-          end
-        ) [] can_read
+      let to_remove =
+        List.fold_left (fun to_remove fh ->
+            let (rr, buf) =
+              if fh = stderr_fd then (
+                (input stderr, err_buf)
+              ) else (
+                (input stdout, in_buf)
+              ) in
+            begin match rr with
+              | Ok len ->
+                Buffer.add_subbytes buf read_buf 0 len;
+                to_remove
+              | Error `Eof ->
+                fh :: to_remove
+            end
+          ) [] can_read in
+      read_list
+      |> List.filter (fun fh -> not (List.mem fh to_remove))
       |> loop
   in
   ignore (loop [ stdout_fd ; stderr_fd ]);
