@@ -8,15 +8,16 @@ no C bindings, it's trivial to vendor, and the API can be learned in 5 minutes.
 
 Here's a simple example:
 
-.. code-block:: ocaml
+```ocaml
 
-   match Curly.(run (Request.make ~url:"https://opam.ocaml.org" ~meth:`GET ())) with
-   | Ok x ->
-     Format.printf "status: %d\n" x.Curly.Response.code;
-     Format.printf "headers: %a\n" Curly.Header.pp x.Curly.Response.headers;
-     Format.printf "body: %s\n" x.Curly.Response.body
-   | Error e ->
-     Format.printf "Failed: %a" Curly.Error.pp e
+match Curly.(run (Request.make ~url:"https://opam.ocaml.org" ~meth:`GET ())) with
+| Ok x ->
+  Format.printf "status: %d\n" x.Curly.Response.code;
+  Format.printf "headers: %a\n" Curly.Header.pp x.Curly.Response.headers;
+  Format.printf "body: %s\n" x.Curly.Response.body
+| Error e ->
+  Format.printf "Failed: %a" Curly.Error.pp e
+```
 
 There's not much more to it than this. Consult curly.mli to see how to construct
 various requests and read responses.
