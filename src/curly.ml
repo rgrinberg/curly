@@ -21,7 +21,8 @@ module Meth = struct
     | `TRACE
     | `CONNECT
     | `PATCH
-    | `Other of string ]
+    | `Other of string
+    ]
 
   let to_string = function
     | `GET -> "GET"
@@ -81,7 +82,8 @@ module Process_result = struct
   type t =
     { status: Unix.process_status
     ; stderr: string
-    ; stdout: string }
+    ; stdout: string
+    }
 
   let pp_process_status fmt = function
     | Unix.WEXITED n -> Format.fprintf fmt "Exit code %d" n
@@ -145,7 +147,8 @@ module Request = struct
       ]
 
   let pp fmt t =
-    Format.fprintf fmt "{ meth=%a;@ url=\"%s\";@ headers=\"%a\";@ body=\"%s\"}"
+    Format.fprintf fmt
+      "{@ meth=%a;@ url=\"%s\";@ headers=\"%a\";@ body=\"%s\"@ }"
       Meth.pp t.meth t.url Header.pp t.headers t.body
 end
 
