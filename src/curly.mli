@@ -24,7 +24,7 @@ module Response : sig
   type t =
     { code: int
     ; headers: Header.t
-    ; body: string
+    ; body:string
     }
 
   val pp : Format.formatter -> t -> unit
@@ -33,9 +33,9 @@ end
 module Request : sig
   type t =
     { meth: Meth.t
-    ; url: string
+    ; url:string
     ; headers: Header.t
-    ; body: string
+    ; body:string
     }
 
   val make
@@ -54,8 +54,8 @@ end
 module Process_result : sig
   type t =
     { status: Unix.process_status
-    ; stderr: string
-    ; stdout: string
+    ; stderr:string
+    ; stdout:string
     }
 
   val pp : Format.formatter -> t -> unit
@@ -71,8 +71,38 @@ module Error : sig
   val pp : Format.formatter -> t -> unit
 end
 
-val run
+val request
   : ?exe:string
   -> ?args:string list
   -> Request.t
+  -> (Response.t, Error.t) Result.result
+
+val get
+  : ?exe:string
+  -> ?args:string list
+  -> ?headers:Header.t
+  -> string
+  -> (Response.t, Error.t) Result.result
+
+val delete
+  : ?exe:string
+  -> ?args:string list
+  -> ?headers:Header.t
+  -> string
+  -> (Response.t, Error.t) Result.result
+
+val post 
+  : ?exe:string
+  -> ?args:string list
+  -> ?headers:Header.t
+  -> ?body:string
+  -> string
+  -> (Response.t, Error.t) Result.result
+
+val put
+  : ?exe:string
+  -> ?args:string list
+  -> ?headers:Header.t
+  -> ?body:string
+  -> string
   -> (Response.t, Error.t) Result.result

@@ -211,7 +211,7 @@ let run prog args stdin_str =
   ; stderr = Buffer.contents err_buf
   }
 
-let run ?(exe="curl") ?(args=[]) req =
+let request ?(exe="curl") ?(args=[]) req =
   Request.validate req >>= fun req ->
   let args = "-si" :: (Request.to_cmd_args req) @ args in
   let res =
@@ -224,3 +224,13 @@ let run ?(exe="curl") ?(args=[]) req =
   match Response.of_stdout res.Process_result.stdout with
   | Ok r -> Ok r
   | Error e -> Error (Error.Failed_to_read_response (e, res))
+
+let get ?exe ?args ?headers url =
+  request ?exe ?args (Request.make ?headers ~url ~meth:`GET ())
+let delete ?exe ?args ?headers url =
+  request ?exe ?args (Request.make ?headers ~url ~meth:`DELETE ())
+
+let post ?exe ?args ?headers ?body url =
+  request ?exe ?args (Request.make ?body ?headers ~url ~meth:`POST ())
+let put ?exe ?args ?headers ?body url =
+  request ?exe ?args (Request.make ?body ?headers ~url ~meth:`PUT ())
