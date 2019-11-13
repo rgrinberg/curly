@@ -1,8 +1,0 @@
-(jbuild_version 1)
-
-(ocamllex (http))
-
-(library
- ((name curly)
-  (public_name curly)
-  (libraries (unix result))))

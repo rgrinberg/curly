@@ -1,0 +1,7 @@
+(executable
+ (name readme_example)
+ (libraries curly))
+
+(alias
+ (name DEFAULT)
+ (deps readme_example.exe))

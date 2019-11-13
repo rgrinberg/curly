@@ -1,0 +1,6 @@
+(ocamllex http)
+
+(library
+ (name curly)
+ (public_name curly)
+ (libraries unix result))

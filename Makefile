@@ -1,16 +1,16 @@
 .PHONY: all clean test
 
-BUILD=jbuilder build --dev
-RUNTEST=jbuilder runtest -j1 --no-buffer --dev
+BUILD=dune build
+RUNTEST=dune runtest -j1 --no-buffer
 
 all:
-	$(BUILD) @install @DEFAULT
+	@$(BUILD) @install @DEFAULT
 
 test:
-	$(RUNTEST)
+	@$(RUNTEST)
 
 clean:
-	rm -rf _build
+	@dune clean
 
 REPO=../opam-repository
 PACKAGES=$(REPO)/packages

@@ -1,23 +1,22 @@
-opam-version: "1.2"
+opam-version: "2.0"
 maintainer:   "rudi.grinberg@gmail.com"
 authors:      ["Rudi Grinberg"]
 license:      "ISC"
-
+synopsis: "Curly is a brain dead wrapper around the curl command line utility"
 homepage:     "https://github.com/rgrinberg/curly"
-dev-repo:     "https://github.com/rgrinberg/curly.git"
+dev-repo:     "git+https://github.com/rgrinberg/curly.git"
 bug-reports:  "https://github.com/rgrinberg/curly/issues"
-
 build: [
-  ["jbuilder" "subst" "-p" name] {pinned}
-  ["jbuilder" "build" "-p" name "-j" jobs]
+  ["dune" "subst"] {pinned}
+  ["dune" "build" "@install" "-p" name "-j" jobs]
+  ["dune" "runtest" "-p" name "-j" jobs] {with-test}
+  ["dune" "build" "@doc" "-p" name "-j" jobs] {with-doc}
 ]
-
-build-test: [["jbuilder" "runtest" "-p" name "-j" jobs]]
-
 depends: [
-  "jbuilder" {build & >= "1.0+beta9"}
+  "dune" {>= "1.0"}
   "base-unix"
   "result"
-  "cohttp-lwt-unix" {test}
+  "ocaml" { >= "4.02.3"} 
+  "cohttp-lwt-unix" {with-test}
+  "odoc" {with-doc}
 ]
-available: [ocaml-version >= "4.02.3"]
