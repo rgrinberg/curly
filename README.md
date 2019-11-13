@@ -1,5 +1,4 @@
-Curly - The Dumbest Http Client
-===============================
+# Curly - The Dumbest Http Client
 
 Curly is a brain dead wrapper around the curl command line utility designed to
 provide a 0 dependency solution for applications that want to create some very
@@ -20,4 +19,5 @@ match Curly.(run (Request.make ~url:"https://opam.ocaml.org" ~meth:`GET ())) wit
 ```
 
 There's not much more to it than this. Consult curly.mli to see how to construct
-various requests and read responses.
+various requests and read responses,
+or [read the online documentation](https://rgrinberg.github.io/curly/).
