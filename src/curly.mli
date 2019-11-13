@@ -71,13 +71,20 @@ module Error : sig
   val pp : Format.formatter -> t -> unit
 end
 
-val request
+val run
   : ?exe:string
   -> ?args:string list
   -> Request.t
   -> (Response.t, Error.t) Result.result
 
 val get
+  : ?exe:string
+  -> ?args:string list
+  -> ?headers:Header.t
+  -> string
+  -> (Response.t, Error.t) Result.result
+
+val head
   : ?exe:string
   -> ?args:string list
   -> ?headers:Header.t
