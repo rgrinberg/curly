@@ -1,7 +1,3 @@
-(executable
+(test
  (name test_curly)
  (libraries curly alcotest cohttp-lwt-unix lwt.unix))
-
-(alias
- (name runtest)
- (action (run ./test_curly.exe)))
