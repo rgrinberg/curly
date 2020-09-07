@@ -9,7 +9,7 @@ license: "ISC"
 homepage: "https://github.com/rgrinberg/curly"
 bug-reports: "https://github.com/rgrinberg/curly/issues"
 depends: [
-  "dune" {>= "2"}
+  "dune" {>= "2.4"}
   "ocaml" {>= "4.02.3"}
   "base-unix"
   "result"

@@ -1,4 +1,4 @@
-(lang dune 2.4.0)
+(lang dune 2.4)
 (name curly)
 
 (generate_opam_files true)
@@ -16,12 +16,11 @@
  (description "") ; TODO
  (depends
   ;; General system dependencies
-  (dune (>= 2))
+  (dune (>= 2.4))
   (ocaml (>= 4.02.3))
   base-unix
   result
 
   (alcotest :with-test)
   (cohttp-lwt-unix :with-test)
-  (odoc :with-doc)
-))
+  (odoc :with-doc)))
