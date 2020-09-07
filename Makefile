@@ -15,14 +15,9 @@ clean:
 REPO=../opam-repository
 PACKAGES=$(REPO)/packages
 
-# until we have https://github.com/ocaml/opam-publish/issues/38
-pkg-%:
-	topkg opam pkg -n $*
-	mkdir -p $(PACKAGES)/$*
-	cp -r _build/$*.* $(PACKAGES)/$*/
-	rm -f $(PACKAGES)/$*/$*.opam
-	cd $(PACKAGES) && git add $*
-
-PKGS=$(basename $(wildcard *.opam))
-opam-pkg:
-	$(MAKE) $(PKGS:%=pkg-%)
+opam-release:
+	dune-release distrib --skip-build --skip-lint --skip-tests
+	# See https://github.com/ocamllabs/dune-release/issues/206
+	DUNE_RELEASE_DELEGATE=github-dune-release-delegate dune-release publish distrib --verbose
+	dune-release opam pkg
+	dune-release opam submit
