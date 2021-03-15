@@ -157,12 +157,33 @@ let result_of_process_result t =
   | Unix.WEXITED 0 -> Ok t
   | _ -> Error (Error.Bad_exit  t)
 
+let array_filter f a =
+  Array.to_list a
+  |> List.filter f
+  |> Array.of_list
+
+let is_prefix s ~prefix =
+  let s_len = String.length s in
+  let prefix_len = String.length prefix in
+  (s_len >= prefix_len) && String.equal (String.sub s 0 prefix_len) prefix
+
+let var_in vars env_string =
+  List.exists (fun var -> is_prefix ~prefix:(var ^ "=") env_string) vars
+
+let curl_env () =
+  if Sys.win32 then
+    let kept_variables = ["PATH"; "SYSTEMROOT"] in
+    Unix.environment ()
+    |> array_filter (var_in kept_variables)
+  else
+    [||]
+
 let run prog args stdin_str =
   let (stdout, stdin, stderr) =
     let prog =
       prog :: (List.map Filename.quote args)
       |> String.concat " " in
-    Unix.open_process_full prog [||] in
+    Unix.open_process_full prog (curl_env ()) in
   if String.length stdin_str > 0 then (
     output_string stdin stdin_str
   );
