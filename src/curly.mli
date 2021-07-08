@@ -24,7 +24,7 @@ module Response : sig
   type t =
     { code: int
     ; headers: Header.t
-    ; body:string
+    ; body: string
     }
 
   val pp : Format.formatter -> t -> unit
@@ -33,13 +33,13 @@ end
 module Request : sig
   type t =
     { meth: Meth.t
-    ; url:string
+    ; url: string
     ; headers: Header.t
-    ; body:string
+    ; body: string
     }
 
   val make
-    : ?headers:Header.t
+    :  ?headers:Header.t
     -> ?body:string
     -> url:string
     -> meth:Meth.t
@@ -54,8 +54,8 @@ end
 module Process_result : sig
   type t =
     { status: Unix.process_status
-    ; stderr:string
-    ; stdout:string
+    ; stderr: string
+    ; stdout: string
     }
 
   val pp : Format.formatter -> t -> unit
@@ -72,13 +72,13 @@ module Error : sig
 end
 
 val run
-  : ?exe:string
+  :  ?exe:string
   -> ?args:string list
   -> Request.t
   -> (Response.t, Error.t) Result.result
 
 val get
-  : ?exe:string
+  :  ?exe:string
   -> ?args:string list
   -> ?headers:Header.t
   -> string
@@ -87,7 +87,7 @@ val get
     @since 0.2.0 *)
 
 val head
-  : ?exe:string
+  :  ?exe:string
   -> ?args:string list
   -> ?headers:Header.t
   -> string
@@ -96,7 +96,7 @@ val head
     @since 0.2.0 *)
 
 val delete
-  : ?exe:string
+  :  ?exe:string
   -> ?args:string list
   -> ?headers:Header.t
   -> string
@@ -104,8 +104,8 @@ val delete
 (** Specialized version of {!run} for method [`DELETE]
     @since 0.2.0 *)
 
-val post 
-  : ?exe:string
+val post
+  :  ?exe:string
   -> ?args:string list
   -> ?headers:Header.t
   -> ?body:string
@@ -115,7 +115,7 @@ val post
     @since 0.2.0 *)
 
 val put
-  : ?exe:string
+  :  ?exe:string
   -> ?args:string list
   -> ?headers:Header.t
   -> ?body:string
