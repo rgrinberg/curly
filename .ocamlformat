@@ -1,0 +1,8 @@
+version = 0.19.0
+profile = ocamlformat
+indicate-multiline-delimiters = closing-on-separate-line
+type-decl = sparse
+if-then-else = k-r
+break-cases = all
+ocp-indent-compat = true
+space-around-records = true
