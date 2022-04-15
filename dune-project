@@ -17,7 +17,7 @@
  (depends
   ;; General system dependencies
   (dune (>= 2.4))
-  (ocaml (>= 4.02.3))
+  (ocaml (>= 4.03.0))
   base-unix
   result
 

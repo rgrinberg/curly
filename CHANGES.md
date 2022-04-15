@@ -1,3 +1,9 @@
+Pending
+-------
+
+* Passthrough case-insensitive PATH and SYSTEMROOT on Windows (@emillon,
+  @jonahbeckford)
+
 0.2.0 (07/09/2020)
 ------------------
 
