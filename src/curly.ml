@@ -162,19 +162,21 @@ let array_filter f a =
   |> List.filter f
   |> Array.of_list
 
-let is_prefix s ~prefix =
+let is_prefix_ci s ~prefix =
   let s_len = String.length s in
   let prefix_len = String.length prefix in
-  (s_len >= prefix_len) && String.equal (String.sub s 0 prefix_len) prefix
+  let s_lc = String.lowercase_ascii s in
+  let prefix_lc = String.lowercase_ascii prefix in
+  (s_len >= prefix_len) && String.equal (String.sub s_lc 0 prefix_len) prefix_lc
 
-let var_in vars env_string =
-  List.exists (fun var -> is_prefix ~prefix:(var ^ "=") env_string) vars
+let var_in_ci vars env_string =
+  List.exists (fun var -> is_prefix_ci ~prefix:(var ^ "=") env_string) vars
 
 let curl_env () =
   if Sys.win32 then
     let kept_variables = ["PATH"; "SYSTEMROOT"] in
     Unix.environment ()
-    |> array_filter (var_in kept_variables)
+    |> array_filter (var_in_ci kept_variables)
   else
     [||]
 

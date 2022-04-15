@@ -10,7 +10,7 @@ homepage: "https://github.com/rgrinberg/curly"
 bug-reports: "https://github.com/rgrinberg/curly/issues"
 depends: [
   "dune" {>= "2.4"}
-  "ocaml" {>= "4.02.3"}
+  "ocaml" {>= "4.03.0"}
   "base-unix"
   "result"
   "alcotest" {with-test}
