@@ -251,15 +251,15 @@ let run ?(exe="curl") ?(args=[]) ?(follow_redirects=true) req =
     with e ->
       Error (Error.Exn e)
   in
-  let rec handle_res res res_r =
-    match Response.of_stdout res with
+  let rec handle_res res =
+    match Response.of_stdout res.Process_result.stdout with
     | Ok r ->
        if follow_redirects && is_redirect_code r.Response.code then
-         handle_res r.Response.body res_r
+         handle_res { res with stdout = r.Response.body }
        else Ok r
-    | Error e -> Error (Error.Failed_to_read_response (e, res_r))
+    | Error e -> Error (Error.Failed_to_read_response (e, res))
   in
-  res >>= fun r -> handle_res r.Process_result.stdout r
+  res >>= handle_res
   
 let get ?exe ?args ?headers ?follow_redirects url =
   run ?exe ?args ?follow_redirects (Request.make ?headers ~url ~meth:`GET ())
