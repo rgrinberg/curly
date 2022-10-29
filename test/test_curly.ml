@@ -23,7 +23,7 @@ let callback req body = function
   | ["write_body"] ->
     Server.respond_string ~status:`OK ~body ()
   | _ ->
-     failwith (sprintf "Not found: %s" (Request.resource req))
+    failwith (sprintf "Not found: %s" (Request.resource req))
 
 let test_server () =
   let (stop, stopper) = Lwt.task () in
