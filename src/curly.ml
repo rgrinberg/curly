@@ -234,27 +234,40 @@ let run prog args stdin_str =
   ; stderr = Buffer.contents err_buf
   }
 
-let run ?(exe="curl") ?(args=[]) req =
+let is_redirect_code status =
+  status <= 308 && status >= 300
+
+let run ?(exe="curl") ?(args=[]) ?(follow_redirects=true) req =
   Request.validate req >>= fun req ->
-  let args = "-si" :: (Request.to_cmd_args req) @ args in
+  let args =
+    if follow_redirects then
+      "-L" :: "-si" :: (Request.to_cmd_args req) @ args
+    else
+      "-si" :: (Request.to_cmd_args req) @ args
+  in
   let res =
     try
       result_of_process_result (run exe args req.Request.body)
     with e ->
       Error (Error.Exn e)
   in
-  res >>= fun res ->
-  match Response.of_stdout res.Process_result.stdout with
-  | Ok r -> Ok r
-  | Error e -> Error (Error.Failed_to_read_response (e, res))
-
-let get ?exe ?args ?headers url =
-  run ?exe ?args (Request.make ?headers ~url ~meth:`GET ())
-let head ?exe ?args ?headers url =
-  run ?exe ?args (Request.make ?headers ~url ~meth:`HEAD ())
-let delete ?exe ?args ?headers url =
-  run ?exe ?args (Request.make ?headers ~url ~meth:`DELETE ())
-let post ?exe ?args ?headers ?body url =
-  run ?exe ?args (Request.make ?body ?headers ~url ~meth:`POST ())
-let put ?exe ?args ?headers ?body url =
-  run ?exe ?args (Request.make ?body ?headers ~url ~meth:`PUT ())
+  let rec handle_res res res_r =
+    match Response.of_stdout res with
+    | Ok r ->
+       if follow_redirects && is_redirect_code r.Response.code then
+         handle_res r.Response.body res_r
+       else Ok r
+    | Error e -> Error (Error.Failed_to_read_response (e, res_r))
+  in
+  res >>= fun r -> handle_res r.Process_result.stdout r
+  
+let get ?exe ?args ?headers ?follow_redirects url =
+  run ?exe ?args ?follow_redirects (Request.make ?headers ~url ~meth:`GET ())
+let head ?exe ?args ?headers ?follow_redirects url =
+  run ?exe ?args ?follow_redirects (Request.make ?headers ~url ~meth:`HEAD ())
+let delete ?exe ?args ?headers ?follow_redirects url =
+  run ?exe ?args ?follow_redirects (Request.make ?headers ~url ~meth:`DELETE ())
+let post ?exe ?args ?headers ?body ?follow_redirects url =
+  run ?exe ?args ?follow_redirects (Request.make ?body ?headers ~url ~meth:`POST ())
+let put ?exe ?args ?headers ?body ?follow_redirects url =
+  run ?exe ?args ?follow_redirects (Request.make ?body ?headers ~url ~meth:`PUT ())
