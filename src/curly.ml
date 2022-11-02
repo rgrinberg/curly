@@ -237,7 +237,7 @@ let run prog args stdin_str =
 let is_redirect_code status =
   status <= 308 && status >= 300
 
-let run ?(exe="curl") ?(args=[]) ?(follow_redirects=true) req =
+let run ?(exe="curl") ?(args=[]) ?(follow_redirects=false) req =
   Request.validate req >>= fun req ->
   let args =
     if follow_redirects then
