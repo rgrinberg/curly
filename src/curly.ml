@@ -173,12 +173,9 @@ let var_in_ci vars env_string =
   List.exists (fun var -> is_prefix_ci ~prefix:(var ^ "=") env_string) vars
 
 let curl_env () =
-  if Sys.win32 then
-    let kept_variables = ["PATH"; "SYSTEMROOT"] in
-    Unix.environment ()
-    |> array_filter (var_in_ci kept_variables)
-  else
-    [||]
+  let kept_variables = ["PATH"; "SYSTEMROOT"] in
+  Unix.environment ()
+  |> array_filter (var_in_ci kept_variables)
 
 let run prog args stdin_str =
   let (stdout, stdin, stderr) =
