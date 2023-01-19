@@ -3,4 +3,4 @@
 (library
  (name curly)
  (public_name curly)
- (libraries unix result))
+ (libraries unix))
