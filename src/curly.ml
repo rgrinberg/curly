@@ -179,10 +179,8 @@ let curl_env () =
 
 let run prog args stdin_str =
   let (stdout, stdin, stderr) =
-    let prog =
-      prog :: (List.map Filename.quote args)
-      |> String.concat " " in
-    Unix.open_process_full prog (curl_env ()) in
+    let args = Array.of_list args in
+    Unix.open_process_args_full prog args (curl_env ()) in
   if String.length stdin_str > 0 then (
     output_string stdin stdin_str
   );
