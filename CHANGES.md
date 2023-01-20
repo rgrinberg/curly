@@ -1,9 +1,11 @@
-Pending
--------
+0.3.0 (2023-01-20)
+------------------
 
 * Passthrough case-insensitive PATH and SYSTEMROOT on Windows (@emillon,
-  @jonahbeckford)
-* Passthrough PATH to Unixes too. (@bikal)
+  @jonahbeckford, #6, #8)
+* Passthrough PATH to Unixes too. (@bikal, #12)
+* Add `?follow_redirects` argument to `run` and related functions
+  (@rawleyfowler, #5).
 
 0.2.0 (07/09/2020)
 ------------------
