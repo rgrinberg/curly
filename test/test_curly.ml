@@ -65,22 +65,22 @@ let body_header b = ["content-length", string_of_int (String.length b)]
 
 let run_simple_get _ =
   Alcotest.check t_result "simple_get"
-    (Curly.run (with_path "simple_get"))
     (Ok { Response.code = 200
         ; body="curly"
         ; headers = body_header simple_get_body
         }
     )
+    (Curly.run (with_path "simple_get"))
 ;;
 
 let read_header _ =
   let (k, v) = ("x-curly", "header value") in
   Alcotest.check t_result "read_header"
-    (Curly.run { (with_path "read_header") with Request.headers = [k, v] })
     (Ok { Response.code = 200
         ; body = v
         ; headers = body_header v
         })
+    (Curly.run { (with_path "read_header") with Request.headers = [k, v] })
 ;;
 
 let write_body _ =
