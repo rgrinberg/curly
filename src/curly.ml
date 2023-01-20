@@ -234,11 +234,10 @@ let is_redirect_code status =
 
 let run ?(exe="curl") ?(args=[]) ?(follow_redirects=false) req =
   Request.validate req >>= fun req ->
+  let args = "-s" :: "-i" :: (Request.to_cmd_args req) @ args in
   let args =
-    if follow_redirects then
-      "-L" :: "-si" :: (Request.to_cmd_args req) @ args
-    else
-      "-si" :: (Request.to_cmd_args req) @ args
+    if follow_redirects then "-L" :: args
+    else args
   in
   let res =
     try
