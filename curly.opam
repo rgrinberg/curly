@@ -2,14 +2,13 @@
 opam-version: "2.0"
 synopsis:
   "Curly is a brain dead wrapper around the curl command line utility"
-description: ""
 maintainer: ["rudi.grinberg@gmail.com"]
 authors: ["Rudi Grinberg"]
 license: "ISC"
 homepage: "https://github.com/rgrinberg/curly"
 bug-reports: "https://github.com/rgrinberg/curly/issues"
 depends: [
-  "dune" {>= "2.4"}
+  "dune" {>= "2.7"}
   "ocaml" {>= "4.03.0"}
   "base-unix"
   "result"
@@ -18,7 +17,7 @@ depends: [
   "odoc" {with-doc}
 ]
 build: [
-  ["dune" "subst"] {pinned}
+  ["dune" "subst"] {dev}
   [
     "dune"
     "build"
