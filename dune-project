@@ -12,9 +12,8 @@
  (name curly)
  (synopsis "Curly is a brain dead wrapper around the curl command line utility")
  (depends
-  (ocaml (>= 4.03.0))
+  (ocaml (>= 4.08))
   base-unix
-  result
 
   (alcotest :with-test)
   (cohttp-lwt-unix :with-test)

@@ -9,9 +9,8 @@ homepage: "https://github.com/rgrinberg/curly"
 bug-reports: "https://github.com/rgrinberg/curly/issues"
 depends: [
   "dune" {>= "2.7"}
-  "ocaml" {>= "4.03.0"}
+  "ocaml" {>= "4.08"}
   "base-unix"
-  "result"
   "alcotest" {with-test}
   "cohttp-lwt-unix" {with-test}
   "odoc" {with-doc}

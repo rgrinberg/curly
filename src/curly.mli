@@ -76,7 +76,7 @@ val run
   -> ?args:string list
   -> ?follow_redirects:bool
   -> Request.t
-  -> (Response.t, Error.t) Result.result
+  -> (Response.t, Error.t) result
 
 val get
   : ?exe:string
@@ -84,7 +84,7 @@ val get
   -> ?headers:Header.t
   -> ?follow_redirects:bool
   -> string
-  -> (Response.t, Error.t) Result.result
+  -> (Response.t, Error.t) result
 (** Specialized version of {!run} for method [`GET]
     @since 0.2.0 *)
 
@@ -94,7 +94,7 @@ val head
   -> ?headers:Header.t
   -> ?follow_redirects:bool
   -> string
-  -> (Response.t, Error.t) Result.result
+  -> (Response.t, Error.t) result
 (** Specialized version of {!run} for method [`HEAD]
     @since 0.2.0 *)
 
@@ -104,7 +104,7 @@ val delete
   -> ?headers:Header.t
   -> ?follow_redirects:bool
   -> string
-  -> (Response.t, Error.t) Result.result
+  -> (Response.t, Error.t) result
 (** Specialized version of {!run} for method [`DELETE]
     @since 0.2.0 *)
 
@@ -115,7 +115,7 @@ val post
   -> ?body:string
   -> ?follow_redirects:bool
   -> string
-  -> (Response.t, Error.t) Result.result
+  -> (Response.t, Error.t) result
 (** Specialized version of {!run} for method [`POST]
     @since 0.2.0 *)
 
@@ -126,6 +126,6 @@ val put
   -> ?body:string
   -> ?follow_redirects:bool
   -> string
-  -> (Response.t, Error.t) Result.result
+  -> (Response.t, Error.t) result
 (** Specialized version of {!run} for method [`PUT]
     @since 0.2.0 *)
