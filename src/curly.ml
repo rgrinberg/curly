@@ -234,11 +234,13 @@ let is_redirect_code status =
 
 let run ?(exe="curl") ?(args=[]) ?(follow_redirects=false) req =
   Request.validate req >>= fun req ->
-  let args = "-s" :: "-i" :: (Request.to_cmd_args req) @ args in
+  let args = "-si" :: (Request.to_cmd_args req) @ args in
   let args =
     if follow_redirects then "-L" :: args
     else args
   in
+  (* the first argument of args is always the executable name *)
+  let args = exe :: args in
   let res =
     try
       result_of_process_result (run exe args req.Request.body)
