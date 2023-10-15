@@ -9,7 +9,8 @@ module Meth : sig
     | `TRACE
     | `CONNECT
     | `PATCH
-    | `Other of string ]
+    | `Other of string
+    ]
 
   val pp : Format.formatter -> t -> unit
 end
@@ -22,9 +23,9 @@ end
 
 module Response : sig
   type t =
-    { code: int
-    ; headers: Header.t
-    ; body:string
+    { code : int
+    ; headers : Header.t
+    ; body : string
     }
 
   val pp : Format.formatter -> t -> unit
@@ -32,30 +33,22 @@ end
 
 module Request : sig
   type t =
-    { meth: Meth.t
-    ; url:string
-    ; headers: Header.t
-    ; body:string
+    { meth : Meth.t
+    ; url : string
+    ; headers : Header.t
+    ; body : string
     }
 
-  val make
-    : ?headers:Header.t
-    -> ?body:string
-    -> url:string
-    -> meth:Meth.t
-    -> unit
-    -> t
-
+  val make : ?headers:Header.t -> ?body:string -> url:string -> meth:Meth.t -> unit -> t
   val to_cmd_args : t -> string list
-
   val pp : Format.formatter -> t -> unit
 end
 
 module Process_result : sig
   type t =
-    { status: Unix.process_status
-    ; stderr:string
-    ; stdout:string
+    { status : Unix.process_status
+    ; stderr : string
+    ; stdout : string
     }
 
   val pp : Format.formatter -> t -> unit
@@ -72,60 +65,60 @@ module Error : sig
 end
 
 val run
-  : ?exe:string
+  :  ?exe:string
   -> ?args:string list
   -> ?follow_redirects:bool
   -> Request.t
   -> (Response.t, Error.t) result
 
-val get
-  : ?exe:string
-  -> ?args:string list
-  -> ?headers:Header.t
-  -> ?follow_redirects:bool
-  -> string
-  -> (Response.t, Error.t) result
 (** Specialized version of {!run} for method [`GET]
     @since 0.2.0 *)
-
-val head
-  : ?exe:string
+val get
+  :  ?exe:string
   -> ?args:string list
   -> ?headers:Header.t
   -> ?follow_redirects:bool
   -> string
   -> (Response.t, Error.t) result
+
 (** Specialized version of {!run} for method [`HEAD]
     @since 0.2.0 *)
-
-val delete
-  : ?exe:string
+val head
+  :  ?exe:string
   -> ?args:string list
   -> ?headers:Header.t
   -> ?follow_redirects:bool
   -> string
   -> (Response.t, Error.t) result
+
 (** Specialized version of {!run} for method [`DELETE]
     @since 0.2.0 *)
-
-val post 
-  : ?exe:string
+val delete
+  :  ?exe:string
   -> ?args:string list
   -> ?headers:Header.t
-  -> ?body:string
   -> ?follow_redirects:bool
   -> string
   -> (Response.t, Error.t) result
+
 (** Specialized version of {!run} for method [`POST]
     @since 0.2.0 *)
-
-val put
-  : ?exe:string
+val post
+  :  ?exe:string
   -> ?args:string list
   -> ?headers:Header.t
   -> ?body:string
   -> ?follow_redirects:bool
   -> string
   -> (Response.t, Error.t) result
+
 (** Specialized version of {!run} for method [`PUT]
     @since 0.2.0 *)
+val put
+  :  ?exe:string
+  -> ?args:string list
+  -> ?headers:Header.t
+  -> ?body:string
+  -> ?follow_redirects:bool
+  -> string
+  -> (Response.t, Error.t) result
