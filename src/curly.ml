@@ -1,3 +1,5 @@
+module List = ListLabels
+
 module Result = struct
   include Result
 
@@ -47,7 +49,7 @@ module Header = struct
   let empty = []
 
   let to_cmd t =
-    t |> List.map (fun (k, v) -> [ "-H"; Printf.sprintf "%s: %s" k v ]) |> List.concat
+    t |> List.map ~f:(fun (k, v) -> [ "-H"; Printf.sprintf "%s: %s" k v ]) |> List.concat
   ;;
 
   let pp fmt t =
@@ -148,7 +150,7 @@ module Request = struct
   let has_body t = String.length t.body > 0
 
   let validate t =
-    if has_body t && List.mem t.meth [ `GET; `HEAD ]
+    if has_body t && List.mem t.meth ~set:[ `GET; `HEAD ]
     then Error (Error.Invalid_request "No body is allowed with GET/HEAD methods")
     else Ok t
   ;;
@@ -181,7 +183,7 @@ let result_of_process_result (t : Process_result.t) =
   | _ -> Error (Error.Bad_exit t)
 ;;
 
-let array_filter f a = Array.to_list a |> List.filter f |> Array.of_list
+let array_filter f a = Array.to_list a |> List.filter ~f |> Array.of_list
 
 let is_prefix_ci s ~prefix =
   let s_len = String.length s in
@@ -192,7 +194,7 @@ let is_prefix_ci s ~prefix =
 ;;
 
 let var_in_ci vars env_string =
-  List.exists (fun var -> is_prefix_ci ~prefix:(var ^ "=") env_string) vars
+  List.exists ~f:(fun var -> is_prefix_ci ~prefix:(var ^ "=") env_string) vars
 ;;
 
 let curl_env () =
@@ -224,7 +226,8 @@ let run prog args stdin_str =
       let can_read, _, _ = Unix.select read_list [] [] 1.0 in
       let to_remove =
         List.fold_left
-          (fun to_remove fh ->
+          ~init:[]
+          ~f:(fun to_remove fh ->
             let rr, buf =
               if fh = stderr_fd then input stderr, err_buf else input stdout, in_buf
             in
@@ -233,10 +236,9 @@ let run prog args stdin_str =
               Buffer.add_subbytes buf read_buf 0 len;
               to_remove
             | Error `Eof -> fh :: to_remove)
-          []
           can_read
       in
-      read_list |> List.filter (fun fh -> not (List.mem fh to_remove)) |> loop
+      read_list |> List.filter ~f:(fun fh -> not (List.mem fh ~set:to_remove)) |> loop
   in
   ignore (loop [ stdout_fd; stderr_fd ]);
   let status = Unix.close_process_full (stdout, stdin, stderr) in
