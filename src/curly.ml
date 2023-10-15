@@ -92,10 +92,11 @@ module Process_result = struct
     ; stdout : string
     }
 
-  let pp_process_status fmt = function
-    | Unix.WEXITED n -> Format.fprintf fmt "Exit code %d" n
-    | Unix.WSIGNALED n -> Format.fprintf fmt "Signal %d" n
-    | Unix.WSTOPPED n -> Format.fprintf fmt "Stopped %d" n
+  let pp_process_status fmt (exit : Unix.process_status) =
+    match exit with
+    | WEXITED n -> Format.fprintf fmt "Exit code %d" n
+    | WSIGNALED n -> Format.fprintf fmt "Signal %d" n
+    | WSTOPPED n -> Format.fprintf fmt "Stopped %d" n
   ;;
 
   let pp fmt t =
@@ -122,7 +123,7 @@ module Error = struct
         fmt
         "Non 0 exit code %a@.%a"
         Process_result.pp_process_status
-        p.Process_result.status
+        p.status
         Process_result.pp
         p
     | Failed_to_read_response (e, _) ->
@@ -174,8 +175,8 @@ module Request = struct
   ;;
 end
 
-let result_of_process_result t =
-  match t.Process_result.status with
+let result_of_process_result (t : Process_result.t) =
+  match t.status with
   | Unix.WEXITED 0 -> Ok t
   | _ -> Error (Error.Bad_exit t)
 ;;
@@ -255,14 +256,14 @@ let run ?(exe = "curl") ?(args = []) ?(follow_redirects = false) req =
   (* the first argument of args is always the executable name *)
   let args = exe :: args in
   let res =
-    try result_of_process_result (run exe args req.Request.body) with
+    try result_of_process_result (run exe args req.body) with
     | e -> Error (Error.Exn e)
   in
-  let rec handle_res res =
-    match Response.of_stdout res.Process_result.stdout with
+  let rec handle_res (res : Process_result.t) =
+    match Response.of_stdout res.stdout with
     | Ok r ->
-      if follow_redirects && is_redirect_code r.Response.code
-      then handle_res { res with stdout = r.Response.body }
+      if follow_redirects && is_redirect_code r.code
+      then handle_res { res with stdout = r.body }
       else Ok r
     | Error e -> Error (Error.Failed_to_read_response (e, res))
   in
