@@ -248,6 +248,7 @@ let run prog args stdin_str =
   }
 ;;
 
+let is_informational_code status = 100 <= status && status <= 199
 let is_redirect_code status = status <= 308 && status >= 300
 
 let run ?(exe = "curl") ?(args = []) ?(follow_redirects = false) req =
@@ -264,7 +265,10 @@ let run ?(exe = "curl") ?(args = []) ?(follow_redirects = false) req =
   let rec handle_res (res : Process_result.t) =
     match Response.of_stdout res.stdout with
     | Ok r ->
-      if follow_redirects && is_redirect_code r.code
+      (* One or more informational responses may precede the main response
+         from the server. They may safely by ignored. See
+         https://datatracker.ietf.org/doc/html/rfc7231#section-6.2. *)
+      if is_informational_code r.code || (follow_redirects && is_redirect_code r.code)
       then handle_res { res with stdout = r.body }
       else Ok r
     | Error e -> Error (Error.Failed_to_read_response (e, res))
